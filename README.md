@@ -53,3 +53,11 @@ jobs:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
 
 ```
+
+
+## Additional Action Script
+
+This Action/workflow will look for a shell script in location `.github/additional_actions_bump.sh` and execute it. This script if present will run before **any** git comiit occurs as part of the bump process. This is so that you can update version in additional files if required. Available environmental variables are as follows:
+
+- `CURRENT_VERSION` _Set to the current version of the repo._
+- `NEW_VERSION` _Set to the version the repo will be bumped to._
