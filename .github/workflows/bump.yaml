@@ -142,6 +142,45 @@ jobs:
           git status;
 
 
+      - name: Run Additional Actions
+        if: ${{ steps.version-current.outputs.value-out != steps.version-new.outputs.value-out }}
+        shell: bash
+        run: |
+          echo 'run script';
+          if [ -f .github/additional_actions_bump.sh ]; then
+
+            echo "[Info] Set ENV vars for script's usage";
+
+            export CURRENT_VERSION=${{ steps.version-current.outputs.value-out }}
+
+            export NEW_VERSION=${{ steps.version-new.outputs.value-out }}
+
+            echo "[Info] ***************************************";
+
+            echo "[Debug]CURRENT_VERSION=${CURRENT_VERSION}";
+
+            echo "[Debug]NEW_VERSION=${NEW_VERSION}";
+
+            echo "[Info] ***************************************";
+
+            chmod +x .github/additional_actions_bump.sh
+
+            echo "[Debug] found additional action script .github/additional_actions_bump.sh";
+
+            echo "[Info] ***************************************";
+            echo "[Debug] cat .github/additional_actions_bump.sh";
+            echo "[Info] *************";
+
+            echo "[Debug] $(cat .github/additional_actions_bump.sh)";
+
+            echo "[Info] *************";
+            echo "[Info] ***************************************";
+
+            .github/additional_actions_bump.sh
+
+          fi
+
+
       - name: Commit the changelog
         if: ${{ steps.version-new.outputs.value-out && github.ref_name == 'master' }}
         uses: stefanzweifel/git-auto-commit-action@v5
